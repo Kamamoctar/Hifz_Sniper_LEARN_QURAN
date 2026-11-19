@@ -1,0 +1,1081 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "9fec981d4178045dabb17b40f52695ea",
+    "entities": [
+      {
+        "tableName": "learning_card",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `type` TEXT NOT NULL, `surahId` INTEGER NOT NULL, `ayahStart` INTEGER NOT NULL, `ayahEnd` INTEGER NOT NULL, `wordStart` INTEGER, `wordEnd` INTEGER, `prompt` TEXT NOT NULL, `answer` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `lastReviewedAt` INTEGER, `nextReviewAt` INTEGER NOT NULL, `intervalDays` REAL NOT NULL, `stability` REAL NOT NULL, `difficulty` REAL NOT NULL, `lapseCount` INTEGER NOT NULL, `successCount` INTEGER NOT NULL, `hesitationCount` INTEGER NOT NULL, `isWeak` INTEGER NOT NULL, `suspended` INTEGER NOT NULL, `sourceCardId` TEXT, `userNote` TEXT, `estimatedDurationSeconds` INTEGER NOT NULL, `lastResult` TEXT, `algorithmVersion` INTEGER NOT NULL, `promptMode` TEXT NOT NULL DEFAULT 'RECITATION', `contextBeforeCount` INTEGER NOT NULL DEFAULT 0, `contextAfterCount` INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "surahId",
+            "columnName": "surahId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ayahStart",
+            "columnName": "ayahStart",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ayahEnd",
+            "columnName": "ayahEnd",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wordStart",
+            "columnName": "wordStart",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "wordEnd",
+            "columnName": "wordEnd",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "prompt",
+            "columnName": "prompt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "answer",
+            "columnName": "answer",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastReviewedAt",
+            "columnName": "lastReviewedAt",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "nextReviewAt",
+            "columnName": "nextReviewAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "intervalDays",
+            "columnName": "intervalDays",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stability",
+            "columnName": "stability",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "difficulty",
+            "columnName": "difficulty",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lapseCount",
+            "columnName": "lapseCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "successCount",
+            "columnName": "successCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hesitationCount",
+            "columnName": "hesitationCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isWeak",
+            "columnName": "isWeak",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "suspended",
+            "columnName": "suspended",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sourceCardId",
+            "columnName": "sourceCardId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "userNote",
+            "columnName": "userNote",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "estimatedDurationSeconds",
+            "columnName": "estimatedDurationSeconds",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastResult",
+            "columnName": "lastResult",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "algorithmVersion",
+            "columnName": "algorithmVersion",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "promptMode",
+            "columnName": "promptMode",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'RECITATION'"
+          },
+          {
+            "fieldPath": "contextBeforeCount",
+            "columnName": "contextBeforeCount",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "contextAfterCount",
+            "columnName": "contextAfterCount",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_learning_card_nextReviewAt",
+            "unique": false,
+            "columnNames": [
+              "nextReviewAt"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_learning_card_nextReviewAt` ON `${TABLE_NAME}` (`nextReviewAt`)"
+          },
+          {
+            "name": "index_learning_card_surahId_ayahStart_ayahEnd_type",
+            "unique": false,
+            "columnNames": [
+              "surahId",
+              "ayahStart",
+              "ayahEnd",
+              "type"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_learning_card_surahId_ayahStart_ayahEnd_type` ON `${TABLE_NAME}` (`surahId`, `ayahStart`, `ayahEnd`, `type`)"
+          }
+        ]
+      },
+      {
+        "tableName": "review_log",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `cardId` TEXT NOT NULL, `reviewedAt` INTEGER NOT NULL, `rating` TEXT NOT NULL, `previousInterval` REAL NOT NULL, `newInterval` REAL NOT NULL, `previousStability` REAL NOT NULL, `newStability` REAL NOT NULL, `wasOffline` INTEGER NOT NULL, `responseTimeMs` INTEGER, `sessionId` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cardId",
+            "columnName": "cardId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reviewedAt",
+            "columnName": "reviewedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rating",
+            "columnName": "rating",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "previousInterval",
+            "columnName": "previousInterval",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "newInterval",
+            "columnName": "newInterval",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "previousStability",
+            "columnName": "previousStability",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "newStability",
+            "columnName": "newStability",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wasOffline",
+            "columnName": "wasOffline",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "responseTimeMs",
+            "columnName": "responseTimeMs",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "sessionId",
+            "columnName": "sessionId",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_review_log_cardId",
+            "unique": false,
+            "columnNames": [
+              "cardId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_review_log_cardId` ON `${TABLE_NAME}` (`cardId`)"
+          },
+          {
+            "name": "index_review_log_reviewedAt",
+            "unique": false,
+            "columnNames": [
+              "reviewedAt"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_review_log_reviewedAt` ON `${TABLE_NAME}` (`reviewedAt`)"
+          }
+        ]
+      },
+      {
+        "tableName": "surah",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `nameArabic` TEXT NOT NULL, `nameTransliterated` TEXT NOT NULL, `nameFrench` TEXT NOT NULL, `ayahCount` INTEGER NOT NULL, `revelationType` TEXT, `dataVersion` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nameArabic",
+            "columnName": "nameArabic",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nameTransliterated",
+            "columnName": "nameTransliterated",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nameFrench",
+            "columnName": "nameFrench",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ayahCount",
+            "columnName": "ayahCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "revelationType",
+            "columnName": "revelationType",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "dataVersion",
+            "columnName": "dataVersion",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "ayah",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `surahId` INTEGER NOT NULL, `ayahNumber` INTEGER NOT NULL, `verseKey` TEXT NOT NULL, `textUthmani` TEXT NOT NULL, `textSimple` TEXT, `pageNumber` INTEGER, `juzNumber` INTEGER NOT NULL, `hizbNumber` INTEGER, `dataVersion` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "surahId",
+            "columnName": "surahId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ayahNumber",
+            "columnName": "ayahNumber",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "verseKey",
+            "columnName": "verseKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "textUthmani",
+            "columnName": "textUthmani",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "textSimple",
+            "columnName": "textSimple",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pageNumber",
+            "columnName": "pageNumber",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "juzNumber",
+            "columnName": "juzNumber",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hizbNumber",
+            "columnName": "hizbNumber",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "dataVersion",
+            "columnName": "dataVersion",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_ayah_verseKey",
+            "unique": true,
+            "columnNames": [
+              "verseKey"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_ayah_verseKey` ON `${TABLE_NAME}` (`verseKey`)"
+          },
+          {
+            "name": "index_ayah_surahId",
+            "unique": false,
+            "columnNames": [
+              "surahId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ayah_surahId` ON `${TABLE_NAME}` (`surahId`)"
+          }
+        ]
+      },
+      {
+        "tableName": "word",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `verseKey` TEXT NOT NULL, `positionInAyah` INTEGER NOT NULL, `textUthmani` TEXT NOT NULL, `transliteration` TEXT, `translationFrench` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "verseKey",
+            "columnName": "verseKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "positionInAyah",
+            "columnName": "positionInAyah",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "textUthmani",
+            "columnName": "textUthmani",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "transliteration",
+            "columnName": "transliteration",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "translationFrench",
+            "columnName": "translationFrench",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_word_verseKey_positionInAyah",
+            "unique": true,
+            "columnNames": [
+              "verseKey",
+              "positionInAyah"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_word_verseKey_positionInAyah` ON `${TABLE_NAME}` (`verseKey`, `positionInAyah`)"
+          }
+        ]
+      },
+      {
+        "tableName": "audio_track",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `reciterId` TEXT NOT NULL, `reciterName` TEXT NOT NULL, `verseKey` TEXT NOT NULL, `remoteUrl` TEXT NOT NULL, `localPath` TEXT, `durationMs` INTEGER, `checksum` TEXT NOT NULL, `downloadStatus` TEXT NOT NULL, `sourceVersion` TEXT NOT NULL, `timingVersion` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reciterId",
+            "columnName": "reciterId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reciterName",
+            "columnName": "reciterName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "verseKey",
+            "columnName": "verseKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "remoteUrl",
+            "columnName": "remoteUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "localPath",
+            "columnName": "localPath",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "durationMs",
+            "columnName": "durationMs",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "checksum",
+            "columnName": "checksum",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "downloadStatus",
+            "columnName": "downloadStatus",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sourceVersion",
+            "columnName": "sourceVersion",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timingVersion",
+            "columnName": "timingVersion",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_audio_track_verseKey",
+            "unique": false,
+            "columnNames": [
+              "verseKey"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_audio_track_verseKey` ON `${TABLE_NAME}` (`verseKey`)"
+          },
+          {
+            "name": "index_audio_track_reciterId",
+            "unique": false,
+            "columnNames": [
+              "reciterId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_audio_track_reciterId` ON `${TABLE_NAME}` (`reciterId`)"
+          }
+        ]
+      },
+      {
+        "tableName": "word_timing",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `audioTrackId` TEXT NOT NULL, `wordId` TEXT NOT NULL, `startMs` INTEGER NOT NULL, `endMs` INTEGER NOT NULL, `sourceVersion` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "audioTrackId",
+            "columnName": "audioTrackId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wordId",
+            "columnName": "wordId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startMs",
+            "columnName": "startMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endMs",
+            "columnName": "endMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sourceVersion",
+            "columnName": "sourceVersion",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_word_timing_audioTrackId_wordId",
+            "unique": true,
+            "columnNames": [
+              "audioTrackId",
+              "wordId"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_word_timing_audioTrackId_wordId` ON `${TABLE_NAME}` (`audioTrackId`, `wordId`)"
+          },
+          {
+            "name": "index_word_timing_audioTrackId_startMs",
+            "unique": false,
+            "columnNames": [
+              "audioTrackId",
+              "startMs"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_word_timing_audioTrackId_startMs` ON `${TABLE_NAME}` (`audioTrackId`, `startMs`)"
+          }
+        ]
+      },
+      {
+        "tableName": "translation",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `verseKey` TEXT NOT NULL, `languageCode` TEXT NOT NULL, `translatorName` TEXT NOT NULL, `text` TEXT NOT NULL, `source` TEXT NOT NULL, `license` TEXT NOT NULL, `version` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "verseKey",
+            "columnName": "verseKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "languageCode",
+            "columnName": "languageCode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "translatorName",
+            "columnName": "translatorName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "text",
+            "columnName": "text",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source",
+            "columnName": "source",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "license",
+            "columnName": "license",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "version",
+            "columnName": "version",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_translation_verseKey_languageCode_translatorName",
+            "unique": true,
+            "columnNames": [
+              "verseKey",
+              "languageCode",
+              "translatorName"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_translation_verseKey_languageCode_translatorName` ON `${TABLE_NAME}` (`verseKey`, `languageCode`, `translatorName`)"
+          }
+        ]
+      },
+      {
+        "tableName": "tafsir",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `verseKey` TEXT NOT NULL, `languageCode` TEXT NOT NULL, `authorOrCollection` TEXT NOT NULL, `text` TEXT NOT NULL, `source` TEXT NOT NULL, `license` TEXT NOT NULL, `version` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "verseKey",
+            "columnName": "verseKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "languageCode",
+            "columnName": "languageCode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "authorOrCollection",
+            "columnName": "authorOrCollection",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "text",
+            "columnName": "text",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source",
+            "columnName": "source",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "license",
+            "columnName": "license",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "version",
+            "columnName": "version",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_tafsir_verseKey_languageCode_authorOrCollection",
+            "unique": true,
+            "columnNames": [
+              "verseKey",
+              "languageCode",
+              "authorOrCollection"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_tafsir_verseKey_languageCode_authorOrCollection` ON `${TABLE_NAME}` (`verseKey`, `languageCode`, `authorOrCollection`)"
+          }
+        ]
+      },
+      {
+        "tableName": "study_session",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `startedAt` INTEGER NOT NULL, `endedAt` INTEGER, `plannedMinutes` INTEGER NOT NULL, `actualSeconds` INTEGER NOT NULL, `newCardsCount` INTEGER NOT NULL, `reviewCardsCount` INTEGER NOT NULL, `successCount` INTEGER NOT NULL, `failureCount` INTEGER NOT NULL, `sessionType` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startedAt",
+            "columnName": "startedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endedAt",
+            "columnName": "endedAt",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "plannedMinutes",
+            "columnName": "plannedMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "actualSeconds",
+            "columnName": "actualSeconds",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "newCardsCount",
+            "columnName": "newCardsCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reviewCardsCount",
+            "columnName": "reviewCardsCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "successCount",
+            "columnName": "successCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "failureCount",
+            "columnName": "failureCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sessionType",
+            "columnName": "sessionType",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_study_session_startedAt",
+            "unique": false,
+            "columnNames": [
+              "startedAt"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_study_session_startedAt` ON `${TABLE_NAME}` (`startedAt`)"
+          }
+        ]
+      },
+      {
+        "tableName": "weak_point",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `verseKey` TEXT NOT NULL, `wordStart` INTEGER, `wordEnd` INTEGER, `reason` TEXT NOT NULL, `severity` INTEGER NOT NULL, `createdAt` INTEGER NOT NULL, `resolvedAt` INTEGER, `linkedCardId` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "verseKey",
+            "columnName": "verseKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wordStart",
+            "columnName": "wordStart",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "wordEnd",
+            "columnName": "wordEnd",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "reason",
+            "columnName": "reason",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "severity",
+            "columnName": "severity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "resolvedAt",
+            "columnName": "resolvedAt",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "linkedCardId",
+            "columnName": "linkedCardId",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_weak_point_verseKey",
+            "unique": false,
+            "columnNames": [
+              "verseKey"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_weak_point_verseKey` ON `${TABLE_NAME}` (`verseKey`)"
+          },
+          {
+            "name": "index_weak_point_linkedCardId",
+            "unique": false,
+            "columnNames": [
+              "linkedCardId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_weak_point_linkedCardId` ON `${TABLE_NAME}` (`linkedCardId`)"
+          }
+        ]
+      },
+      {
+        "tableName": "download_item",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `resourceType` TEXT NOT NULL, `resourceKey` TEXT NOT NULL, `remoteUrl` TEXT NOT NULL, `localPath` TEXT NOT NULL, `bytesDownloaded` INTEGER NOT NULL, `totalBytes` INTEGER, `status` TEXT NOT NULL, `checksum` TEXT NOT NULL, `errorMessage` TEXT, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "resourceType",
+            "columnName": "resourceType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "resourceKey",
+            "columnName": "resourceKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "remoteUrl",
+            "columnName": "remoteUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "localPath",
+            "columnName": "localPath",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bytesDownloaded",
+            "columnName": "bytesDownloaded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalBytes",
+            "columnName": "totalBytes",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "checksum",
+            "columnName": "checksum",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "errorMessage",
+            "columnName": "errorMessage",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_download_item_resourceType_resourceKey",
+            "unique": true,
+            "columnNames": [
+              "resourceType",
+              "resourceKey"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_download_item_resourceType_resourceKey` ON `${TABLE_NAME}` (`resourceType`, `resourceKey`)"
+          },
+          {
+            "name": "index_download_item_status",
+            "unique": false,
+            "columnNames": [
+              "status"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_download_item_status` ON `${TABLE_NAME}` (`status`)"
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9fec981d4178045dabb17b40f52695ea')"
+    ]
+  }
+}

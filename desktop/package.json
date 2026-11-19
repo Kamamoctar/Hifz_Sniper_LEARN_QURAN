@@ -1,0 +1,56 @@
+{
+  "name": "hifz-sniper-desktop",
+  "version": "0.9.1",
+  "description": "Hifz-Sniper pour Windows — mémorisation ciblée du Coran, hors ligne et sans émulateur.",
+  "main": "main.js",
+  "author": "Hifz-Sniper",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test tests/*.test.js",
+    "test:live-audio": "node tests/live-audio-check.js",
+    "pack:dir": "electron-builder --win dir --x64",
+    "dist:portable": "npm test && electron-builder --win portable --x64",
+    "dist:zip": "npm test && electron-builder --win zip --x64"
+  },
+  "devDependencies": {
+    "electron": "45.4.1",
+    "electron-builder": "26.18.0"
+  },
+  "build": {
+    "appId": "com.hifzsniper.desktop",
+    "productName": "Hifz Sniper Desktop",
+    "asar": true,
+    "compression": "maximum",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "core/**/*",
+      "src/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../app/src/main/assets/content/tanzil-uthmani-1.1",
+        "to": "content"
+      },
+      {
+        "from": "../app/src/main/res/font",
+        "to": "fonts"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "artifactName": "Hifz-Sniper-Desktop-${version}-portable.${ext}"
+    }
+  }
+}

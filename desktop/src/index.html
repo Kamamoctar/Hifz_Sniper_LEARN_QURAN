@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' file:; img-src 'self' data:; media-src 'self' file: blob: https://everyayah.com https://verses.quran.foundation; connect-src 'self' https://everyayah.com https://verses.quran.foundation; object-src 'none'; base-uri 'none'; frame-ancestors 'none'">
+  <title>Hifz Sniper Desktop</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="loading" class="loading-screen">
+    <div class="loading-mark">حفظ</div>
+    <div class="spinner"></div>
+    <p>Préparation du corpus local…</p>
+  </div>
+
+  <div id="app" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">ح</div>
+        <div><strong>Hifz Sniper</strong><span>Desktop</span></div>
+      </div>
+      <nav id="nav" aria-label="Navigation principale">
+        <button class="nav-item active" data-screen="home"><span>⌂</span> Aujourd’hui</button>
+        <button class="nav-item" data-screen="player"><span>▶</span> Lecteur</button>
+        <button class="nav-item" data-screen="learn"><span>✦</span> Hifz-Time</button>
+        <button class="nav-item" data-screen="review"><span>↻</span> Révisions</button>
+        <button class="nav-item" data-screen="weak"><span>◎</span> Points faibles</button>
+        <button class="nav-item" data-screen="stats"><span>▥</span> Statistiques</button>
+        <button class="nav-item" data-screen="downloads"><span>⇩</span> Hors ligne</button>
+        <button class="nav-item" data-screen="settings"><span>⚙</span> Paramètres</button>
+      </nav>
+      <div class="sidebar-footer">
+        <span id="versionLabel">Version</span>
+        <span class="local-badge">● Données locales</span>
+      </div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow" id="screenEyebrow">Session du jour</p>
+          <h1 id="screenTitle">Aujourd’hui</h1>
+        </div>
+        <div class="top-actions">
+          <span id="streakBadge" class="streak-badge">🔥 0 jour</span>
+          <button class="icon-button" id="themeToggle" title="Changer de thème" aria-label="Changer de thème">◐</button>
+        </div>
+      </header>
+      <main id="screen" tabindex="-1"></main>
+    </div>
+  </div>
+
+  <audio id="mainAudio" preload="metadata"></audio>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <div id="onboarding" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle">
+    <div class="modal onboarding-card">
+      <div class="modal-symbol">بِسْمِ ٱللَّٰهِ</div>
+      <p class="eyebrow">Bienvenue sur Windows</p>
+      <h2 id="onboardingTitle">Construisons ton rythme de Hifz</h2>
+      <p class="muted">Tes données restent sur cet ordinateur. Tu pourras tout modifier ensuite.</p>
+      <div class="form-grid">
+        <label>Temps quotidien
+          <select id="onboardingMinutes"><option>5</option><option>10</option><option selected>15</option><option>20</option><option>30</option></select>
+        </label>
+        <label>Niveau
+          <select id="onboardingLevel"><option>Débutant</option><option selected>Intermédiaire</option><option>Avancé</option></select>
+        </label>
+        <label>Sourate de départ
+          <select id="onboardingSurah"></select>
+        </label>
+        <label>Versets nouveaux / jour
+          <select id="onboardingGoal"><option>1</option><option selected>3</option><option>5</option><option>7</option><option>10</option></select>
+        </label>
+      </div>
+      <button class="primary large" id="finishOnboarding">Commencer ma première session</button>
+    </div>
+  </div>
+
+  <script src="../core/loop-engine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

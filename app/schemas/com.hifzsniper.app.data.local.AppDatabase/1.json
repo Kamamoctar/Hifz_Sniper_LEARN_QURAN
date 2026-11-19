@@ -1,0 +1,278 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "2a5ada8d0f111f5a76b80d0dd22aac31",
+    "entities": [
+      {
+        "tableName": "learning_card",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `type` TEXT NOT NULL, `surahId` INTEGER NOT NULL, `ayahStart` INTEGER NOT NULL, `ayahEnd` INTEGER NOT NULL, `wordStart` INTEGER, `wordEnd` INTEGER, `prompt` TEXT NOT NULL, `answer` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `lastReviewedAt` INTEGER, `nextReviewAt` INTEGER NOT NULL, `intervalDays` REAL NOT NULL, `stability` REAL NOT NULL, `difficulty` REAL NOT NULL, `lapseCount` INTEGER NOT NULL, `successCount` INTEGER NOT NULL, `hesitationCount` INTEGER NOT NULL, `isWeak` INTEGER NOT NULL, `suspended` INTEGER NOT NULL, `sourceCardId` TEXT, `userNote` TEXT, `estimatedDurationSeconds` INTEGER NOT NULL, `lastResult` TEXT, `algorithmVersion` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "surahId",
+            "columnName": "surahId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ayahStart",
+            "columnName": "ayahStart",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ayahEnd",
+            "columnName": "ayahEnd",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wordStart",
+            "columnName": "wordStart",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "wordEnd",
+            "columnName": "wordEnd",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "prompt",
+            "columnName": "prompt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "answer",
+            "columnName": "answer",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastReviewedAt",
+            "columnName": "lastReviewedAt",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "nextReviewAt",
+            "columnName": "nextReviewAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "intervalDays",
+            "columnName": "intervalDays",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stability",
+            "columnName": "stability",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "difficulty",
+            "columnName": "difficulty",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lapseCount",
+            "columnName": "lapseCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "successCount",
+            "columnName": "successCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hesitationCount",
+            "columnName": "hesitationCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isWeak",
+            "columnName": "isWeak",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "suspended",
+            "columnName": "suspended",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sourceCardId",
+            "columnName": "sourceCardId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "userNote",
+            "columnName": "userNote",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "estimatedDurationSeconds",
+            "columnName": "estimatedDurationSeconds",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastResult",
+            "columnName": "lastResult",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "algorithmVersion",
+            "columnName": "algorithmVersion",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_learning_card_nextReviewAt",
+            "unique": false,
+            "columnNames": [
+              "nextReviewAt"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_learning_card_nextReviewAt` ON `${TABLE_NAME}` (`nextReviewAt`)"
+          },
+          {
+            "name": "index_learning_card_surahId_ayahStart_ayahEnd_type",
+            "unique": false,
+            "columnNames": [
+              "surahId",
+              "ayahStart",
+              "ayahEnd",
+              "type"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_learning_card_surahId_ayahStart_ayahEnd_type` ON `${TABLE_NAME}` (`surahId`, `ayahStart`, `ayahEnd`, `type`)"
+          }
+        ]
+      },
+      {
+        "tableName": "review_log",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `cardId` TEXT NOT NULL, `reviewedAt` INTEGER NOT NULL, `rating` TEXT NOT NULL, `previousInterval` REAL NOT NULL, `newInterval` REAL NOT NULL, `previousStability` REAL NOT NULL, `newStability` REAL NOT NULL, `wasOffline` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cardId",
+            "columnName": "cardId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reviewedAt",
+            "columnName": "reviewedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rating",
+            "columnName": "rating",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "previousInterval",
+            "columnName": "previousInterval",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "newInterval",
+            "columnName": "newInterval",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "previousStability",
+            "columnName": "previousStability",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "newStability",
+            "columnName": "newStability",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wasOffline",
+            "columnName": "wasOffline",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_review_log_cardId",
+            "unique": false,
+            "columnNames": [
+              "cardId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_review_log_cardId` ON `${TABLE_NAME}` (`cardId`)"
+          },
+          {
+            "name": "index_review_log_reviewedAt",
+            "unique": false,
+            "columnNames": [
+              "reviewedAt"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_review_log_reviewedAt` ON `${TABLE_NAME}` (`reviewedAt`)"
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2a5ada8d0f111f5a76b80d0dd22aac31')"
+    ]
+  }
+}

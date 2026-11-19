@@ -1,0 +1,17 @@
+.gradle/
+.gradle-download/
+.gradle-home/
+.java-tmp/
+local.properties
+keystore.properties
+*.jks
+*.keystore
+build/
+app/build/
+desktop/node_modules/
+desktop/dist/
+*.iml
+.idea/
+*.apk
+*.zip
+deliverables/
