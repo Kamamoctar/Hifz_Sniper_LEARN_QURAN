@@ -23,8 +23,8 @@ android {
         applicationId = "com.hifzsniper.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 10
-        versionName = "0.9.1"
+        versionCode = 11
+        versionName = "0.9.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -50,7 +50,9 @@ android {
 
     buildTypes {
         getByName("release") {
-            signingConfig = if (hasReleaseSigning) signingConfigs.findByName("release") else signingConfigs.getByName("debug")
+            // Une release sans keystore reste réellement non signée : ne jamais distribuer
+            // silencieusement une build de production avec la clé de débogage Android.
+            signingConfig = if (hasReleaseSigning) signingConfigs.findByName("release") else null
         }
     }
 

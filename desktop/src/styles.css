@@ -136,6 +136,17 @@ input[type="range"] { padding: 0; accent-color: var(--green-bright); }
 .phase-step.done { color: var(--gold-soft); }
 .masked { filter: blur(8px); user-select: none; }
 .chunk { display: inline-block; padding: 8px 10px; margin: 5px; border: 1px solid var(--border); border-radius: 10px; }
+.recitation-tools { display: grid; gap: 12px; width: min(860px, 100%); margin: 18px auto 0; text-align: left; }
+.recitation-analysis { padding: 16px; border: 1px solid var(--border); border-radius: 13px; background: var(--surface-2); }
+.recitation-summary { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+.recitation-score { min-width: 68px; font-size: 25px; font-weight: 850; color: var(--gold-soft); }
+.recitation-words { direction: rtl; font-family: "Amiri Quran", "Amiri", serif; font-size: 25px; line-height: 2.1; }
+.recitation-word { display: inline-block; padding: 0 4px; margin: 1px; border-radius: 7px; border-bottom: 2px solid transparent; }
+.recitation-word.correct { color: var(--green-bright); }
+.recitation-word.close { color: var(--gold-soft); border-bottom-color: var(--gold); }
+.recitation-word.replaced { color: #ffab7b; border-bottom-color: #ff8b4b; }
+.recitation-word.missing { color: var(--danger); background: rgba(239,109,101,.11); border-bottom-color: var(--danger); }
+.recitation-extra { color: var(--danger); margin-top: 8px; font-size: 12px; }
 
 .list { display: grid; gap: 10px; }
 .list-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 15px 17px; border: 1px solid var(--border); background: var(--surface-2); border-radius: 13px; }

@@ -22,6 +22,11 @@
   let recorderChunks = [];
   let recordingUrl = '';
   let recorderStatus = 'idle';
+  let recordingSession = 0;
+  let manualRecitation = '';
+  let recitationAnalysis = null;
+  let speechRecognizer = null;
+  let speechRecognitionStatus = 'idle';
   const progressByKey = new Map();
 
   const player = {
@@ -134,6 +139,7 @@
     player.repeatCount = 1;
     player.setCycle = 1;
     player.wordIndex = -1;
+    resetRecitation();
     stopAudio();
     saveSoon();
   }
@@ -294,6 +300,54 @@
     return chunks;
   }
 
+  function resetRecitation() {
+    recordingSession += 1;
+    if (mediaRecorder?.state === 'recording') {
+      mediaRecorder.stream?.getTracks().forEach(track => track.stop());
+      mediaRecorder.stop();
+    }
+    mediaRecorder = null;
+    recorderChunks = [];
+    if (speechRecognizer && speechRecognitionStatus === 'listening') speechRecognizer.abort();
+    speechRecognizer = null;
+    speechRecognitionStatus = 'idle';
+    manualRecitation = '';
+    recitationAnalysis = null;
+    if (recordingUrl) URL.revokeObjectURL(recordingUrl);
+    recordingUrl = '';
+    recorderStatus = 'idle';
+  }
+
+  function speechRecognitionAvailable() {
+    return Boolean(window.SpeechRecognition || window.webkitSpeechRecognition);
+  }
+
+  function recitationAnalysisMarkup() {
+    if (!recitationAnalysis) return '';
+    const result = recitationAnalysis;
+    const labels = {
+      fluent: 'Très proche du texte attendu',
+      hesitant: 'Quelques éléments sont à consolider',
+      missed: 'Réécoute et reprends les passages signalés'
+    };
+    const expected = result.expected.map(token => {
+      const detail = token.status === 'correct'
+        ? 'Correct'
+        : token.status === 'missing'
+          ? 'Mot non retrouvé'
+          : `Entendu : ${token.heard}`;
+      return `<span class="recitation-word ${token.status}" title="${escapeHtml(detail)}">${escapeHtml(token.original)}</span>`;
+    }).join(' ');
+    const unexpected = result.unexpected.length
+      ? `<div class="recitation-extra">Mot(s) supplémentaire(s) détecté(s) : ${result.unexpected.map(token => escapeHtml(token.original)).join(' · ')}</div>`
+      : '';
+    return `<div class="recitation-analysis" aria-live="polite">
+      <div class="recitation-summary"><div class="recitation-score">${result.score}%</div><div><strong>${labels[result.rating]}</strong><div class="muted small">${result.counts.correct} exact(s) · ${result.counts.close} proche(s) · ${result.counts.replaced} remplacé(s) · ${result.counts.missing} omis</div></div></div>
+      <div class="recitation-words" aria-label="Comparaison mot à mot">${expected}</div>${unexpected}
+      <p class="muted small">Cette comparaison textuelle est une aide pédagogique, pas une validation du tajwid ni de la prononciation.</p>
+    </div>`;
+  }
+
   function renderLearn() {
     const phases = ['Pré-écoute', 'Découpage', 'Masquage', 'Chaînage', 'Rappel', 'Validation'];
     const verse = getVerse(state.passage.surah, state.passage.startAyah);
@@ -303,7 +357,7 @@
     if (learnPhase === 1) body = `<p class="muted">Travaille chaque groupe séparément avant de les réunir.</p><div class="arabic">${chunks.map((chunk, index) => `<span class="chunk"><small>${index + 1}</small> ${escapeHtml(chunk.join(' '))}</span>`).join('')}</div><button class="secondary" data-action="learn-play">▶ Réécouter le verset</button>`;
     if (learnPhase === 2) body = `<p class="muted">Récite les mots masqués, puis vérifie en cliquant sur le texte.</p><div id="maskedText" class="arabic">${verse.text.split(/\s+/).map((word, index) => `<span class="word ${index % 2 ? 'masked' : ''}">${escapeHtml(word)}</span>`).join(' ')}</div><button class="secondary" data-action="reveal-masked">Révéler tout</button>`;
     if (learnPhase === 3) body = `<p class="muted">Chaîne progressivement : 1, puis 1+2, puis 1+2+3…</p><div class="arabic">${chunks.map((chunk, index) => `<div style="font-size:${Math.max(22, 34 - index * 2)}px">${escapeHtml(chunks.slice(0, index + 1).flat().join(' '))}</div>`).join('')}</div>`;
-    if (learnPhase === 4) body = `<p class="muted">Éloigne le texte, récite de mémoire, puis compare. Tu peux enregistrer ta voix localement.</p><div class="arabic masked" id="recallText">${escapeHtml(verse.text)}</div><div class="row" style="justify-content:center;margin:18px 0"><button class="secondary" data-action="reveal-recall">Afficher le texte</button><button class="${recorderStatus === 'recording' ? 'danger' : 'secondary'}" data-action="${recorderStatus === 'recording' ? 'stop-recording' : 'start-recording'}">${recorderStatus === 'recording' ? '■ Arrêter' : '● Enregistrer'}</button></div>${recordingUrl ? `<audio id="recorderPlayback" controls src="${recordingUrl}"></audio>` : ''}<textarea id="manualRecitation" placeholder="Optionnel : saisis ce que tu as récité pour t’auto-vérifier"></textarea>`;
+    if (learnPhase === 4) body = `<p class="muted">Éloigne le texte, récite de mémoire, puis compare. L’enregistrement reste local.</p><div class="arabic masked" id="recallText">${escapeHtml(verse.text)}</div><div class="row" style="justify-content:center;margin:18px 0"><button class="secondary" data-action="reveal-recall">Afficher le texte</button><button class="${recorderStatus === 'recording' ? 'danger' : 'secondary'}" data-action="${recorderStatus === 'recording' ? 'stop-recording' : 'start-recording'}">${recorderStatus === 'recording' ? '■ Arrêter' : '● Enregistrer'}</button></div>${recordingUrl ? `<audio id="recorderPlayback" controls src="${recordingUrl}"></audio>` : ''}<div class="recitation-tools"><textarea id="manualRecitation" dir="rtl" lang="ar" placeholder="Saisis ta récitation, ou utilise la dictée arabe lorsqu’elle est disponible">${escapeHtml(manualRecitation)}</textarea><div class="row"><button class="secondary" data-action="${speechRecognitionStatus === 'listening' ? 'stop-speech-recognition' : 'start-speech-recognition'}" ${speechRecognitionAvailable() ? '' : 'disabled'}>${speechRecognitionStatus === 'listening' ? '■ Arrêter la dictée' : '🎙 Dictée arabe'}</button><button id="analyzeRecitation" class="primary" data-action="analyze-recitation" ${manualRecitation.trim() ? '' : 'disabled'}>Analyser localement</button><button class="ghost" data-action="clear-recitation" ${manualRecitation || recitationAnalysis ? '' : 'disabled'}>Effacer</button></div><p class="muted small">La comparaison mot à mot s’effectue entièrement sur cet ordinateur. La dictée dépend du moteur de reconnaissance fourni par Windows/Chromium et peut être indisponible ou nécessiter Internet.</p>${recitationAnalysisMarkup()}</div>`;
     if (learnPhase === 5) body = `<p class="muted">Évalue honnêtement le rappel. Le Set complet sera ajouté aux révisions espacées.</p><div class="arabic">${escapeHtml(verse.text)}</div><div class="rating-grid" style="margin-top:20px"><button class="rating missed" data-action="finish-learn" data-rating="missed">Raté<br><span class="muted small">Revoir demain</span></button><button class="rating" data-action="finish-learn" data-rating="hesitant">Hésitant<br><span class="muted small">Consolider vite</span></button><button class="rating fluent" data-action="finish-learn" data-rating="fluent">Fluide<br><span class="muted small">Espacer davantage</span></button></div>`;
     screen.innerHTML = `
       ${passageSelector()}
@@ -555,6 +609,7 @@
     addReviewsForPassage(rating);
     state.sessions.push({ type: 'learn', createdAt: new Date().toISOString(), minutes: Math.max(1, Math.min(state.settings.dailyMinutes, passageVerses().length * 2)), learned: passageVerses().length, rating });
     learnPhase = 0;
+    resetRecitation();
     saveSoon();
     toast('Session enregistrée et révisions planifiées.');
     navigate('home');
@@ -586,16 +641,19 @@
 
   async function startRecording() {
     try {
+      if (speechRecognizer && speechRecognitionStatus === 'listening') speechRecognizer.stop();
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const session = ++recordingSession;
       recorderChunks = [];
       mediaRecorder = new MediaRecorder(stream);
       mediaRecorder.addEventListener('dataavailable', event => { if (event.data.size) recorderChunks.push(event.data); });
       mediaRecorder.addEventListener('stop', () => {
         stream.getTracks().forEach(track => track.stop());
+        if (session !== recordingSession) return;
         if (recordingUrl) URL.revokeObjectURL(recordingUrl);
         recordingUrl = URL.createObjectURL(new Blob(recorderChunks, { type: mediaRecorder.mimeType || 'audio/webm' }));
         recorderStatus = 'ready';
-        renderLearn();
+        if (currentScreen === 'learn') renderLearn();
       });
       mediaRecorder.start();
       recorderStatus = 'recording';
@@ -607,6 +665,57 @@
 
   function stopRecording() {
     if (mediaRecorder?.state === 'recording') mediaRecorder.stop();
+  }
+
+  function startSpeechRecognition() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) return toast('Aucun moteur de dictée compatible n’est disponible sur ce Windows.', 'error');
+    if (recorderStatus === 'recording') stopRecording();
+
+    const baseText = manualRecitation.trim();
+    const recognizer = new SpeechRecognition();
+    speechRecognizer = recognizer;
+    recognizer.lang = 'ar-SA';
+    recognizer.continuous = true;
+    recognizer.interimResults = true;
+    recognizer.maxAlternatives = 1;
+    speechRecognitionStatus = 'listening';
+
+    recognizer.addEventListener('result', event => {
+      let transcript = '';
+      for (let index = 0; index < event.results.length; index += 1) transcript += ` ${event.results[index][0].transcript}`;
+      const field = $('#manualRecitation');
+      if (field) field.value = `${baseText} ${transcript}`.trim();
+    });
+    recognizer.addEventListener('error', event => {
+      const messages = {
+        'not-allowed': 'Accès au microphone refusé.',
+        'audio-capture': 'Aucun microphone utilisable.',
+        network: 'Le service de dictée n’est pas joignable.'
+      };
+      toast(messages[event.error] || `Dictée interrompue : ${event.error}`, 'error');
+    });
+    recognizer.addEventListener('end', () => {
+      if (speechRecognizer !== recognizer) return;
+      manualRecitation = $('#manualRecitation')?.value.trim() || manualRecitation;
+      speechRecognitionStatus = 'idle';
+      speechRecognizer = null;
+      if (manualRecitation) recitationAnalysis = window.HifzRecitation.analyzeRecitation(getVerse(state.passage.surah, state.passage.startAyah).text, manualRecitation);
+      if (currentScreen === 'learn') renderLearn();
+    });
+
+    try {
+      recognizer.start();
+      renderLearn();
+    } catch (error) {
+      speechRecognitionStatus = 'idle';
+      speechRecognizer = null;
+      toast(`Dictée impossible : ${error.message}`, 'error');
+    }
+  }
+
+  function stopSpeechRecognition() {
+    if (speechRecognizer && speechRecognitionStatus === 'listening') speechRecognizer.stop();
   }
 
   async function handleAction(action, element) {
@@ -639,6 +748,19 @@
     if (action === 'finish-learn') return finishLearn(element.dataset.rating);
     if (action === 'start-recording') return startRecording();
     if (action === 'stop-recording') return stopRecording();
+    if (action === 'start-speech-recognition') return startSpeechRecognition();
+    if (action === 'stop-speech-recognition') return stopSpeechRecognition();
+    if (action === 'analyze-recitation') {
+      manualRecitation = $('#manualRecitation')?.value.trim() || '';
+      if (!manualRecitation) return toast('Saisis ou dicte d’abord la récitation à comparer.', 'error');
+      recitationAnalysis = window.HifzRecitation.analyzeRecitation(getVerse(state.passage.surah, state.passage.startAyah).text, manualRecitation);
+      return renderLearn();
+    }
+    if (action === 'clear-recitation') {
+      manualRecitation = '';
+      recitationAnalysis = null;
+      return renderLearn();
+    }
     if (action === 'reveal-review') { reviewReveal = true; return renderReview(); }
     if (action === 'rate-review') return rateCurrentReview(element.dataset.rating);
     if (action === 'add-current-review') { addReviewsForPassage(); toast('Set ajouté aux révisions.'); return renderReview(); }
@@ -739,6 +861,12 @@
 
   screen.addEventListener('input', event => {
     if (event.target.id === 'seek' && Number.isFinite(audio.duration)) audio.currentTime = Number(event.target.value);
+    if (event.target.id === 'manualRecitation') {
+      manualRecitation = event.target.value;
+      recitationAnalysis = null;
+      const analyze = $('#analyzeRecitation');
+      if (analyze) analyze.disabled = !manualRecitation.trim();
+    }
   });
 
   audio.addEventListener('play', updatePlayerLive);

@@ -1,6 +1,6 @@
 {
   "name": "hifz-sniper-desktop",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Hifz-Sniper pour Windows — mémorisation ciblée du Coran, hors ligne et sans émulateur.",
   "main": "main.js",
   "author": "Hifz-Sniper",
@@ -12,7 +12,9 @@
     "test:live-audio": "node tests/live-audio-check.js",
     "pack:dir": "electron-builder --win dir --x64",
     "dist:portable": "npm test && electron-builder --win portable --x64",
-    "dist:zip": "npm test && electron-builder --win zip --x64"
+    "dist:zip": "npm test && electron-builder --win zip --x64",
+    "dist:signed": "node scripts/require-signing-env.js && npm test && electron-builder --win portable --x64 --config.win.forceCodeSigning=true",
+    "verify:signature": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-authenticode.ps1"
   },
   "devDependencies": {
     "electron": "45.4.1",
